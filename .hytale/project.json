@@ -1,0 +1,10 @@
+{
+  "groupId": "com.example",
+  "artifactId": "mod-jam-april-2026",
+  "modName": "modjamapril2026",
+  "version": "0.0.1",
+  "buildSystem": "Gradle",
+  "language": "Java",
+  "jarPath": "build/libs/mod-jam-april-2026-0.0.1.jar",
+  "buildTask": "shadowJar"
+}
