@@ -2,7 +2,7 @@
   "Group": "com.example",
   "Name": "modjamapril2026",
   "Version": "0.0.1",
-  "Description": "A Hytale server mod",
+  "Description": "A Hytale server mod, from a modjam",
   "Authors": [{"Name": "maarten2000ha"}],
   "Main": "com.example.modjamapril2026.modjamapril2026Plugin",
   "LoadOrder": "POSTWORLD",

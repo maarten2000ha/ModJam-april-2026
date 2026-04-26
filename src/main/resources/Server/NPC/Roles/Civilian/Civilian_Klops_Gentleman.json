@@ -1,0 +1,8 @@
+{
+  "Type" : "Variant",
+  "Reference" : "Template_Civilian",
+  "Modify" : {
+    "Appearance" : "Klops_Gentleman",
+    "MaxHealth": 100
+  }
+}

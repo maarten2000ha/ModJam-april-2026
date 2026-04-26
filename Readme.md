@@ -16,7 +16,7 @@ comfortable with it.
 # Objective
 
 - Able to create own NPC
-  - Create custom NPC (Primary)
+  - Create custom NPC (Primary) - DONE
   - Able to spawn them in the world (automagically)
   - Custom model and texture
   - Custom animations

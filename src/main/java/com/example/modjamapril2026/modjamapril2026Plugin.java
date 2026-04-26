@@ -34,7 +34,7 @@ public class modjamapril2026Plugin extends JavaPlugin {
 
     @Override
     protected void setup() {
-        LOGGER.at(Level.INFO).log("[mod jam april 2026] Setting up...");
+        LOGGER.at(Level.INFO).log("[mod jam April 2026] Setting up...");
 
         // Register commands
         registerCommands();
@@ -42,7 +42,7 @@ public class modjamapril2026Plugin extends JavaPlugin {
         // Register event listeners
         registerListeners();
 
-        LOGGER.at(Level.INFO).log("[mod jam april 2026] Setup complete!");
+        LOGGER.at(Level.INFO).log("[mod jam April 2026] Setup complete!");
     }
 
     /**
@@ -65,21 +65,21 @@ public class modjamapril2026Plugin extends JavaPlugin {
 
         try {
             new PlayerListener().register(eventBus);
-            LOGGER.at(Level.INFO).log("[mod jam april 2026] Registered player event listeners");
+            LOGGER.at(Level.INFO).log("[mod jam April 2026] Registered player event listeners");
         } catch (Exception e) {
-            LOGGER.at(Level.WARNING).withCause(e).log("[mod jam april 2026] Failed to register listeners");
+            LOGGER.at(Level.WARNING).withCause(e).log("[mod jam April 2026] Failed to register listeners");
         }
     }
 
     @Override
     protected void start() {
-        LOGGER.at(Level.INFO).log("[mod jam april 2026] Started!");
-        LOGGER.at(Level.INFO).log("[mod jam april 2026] Use /mja2 help for commands");
+        LOGGER.at(Level.INFO).log("[mod jam April 2026] Started!");
+        LOGGER.at(Level.INFO).log("[mod jam April 2026] Use /mja2 help for commands");
     }
 
     @Override
     protected void shutdown() {
-        LOGGER.at(Level.INFO).log("[mod jam april 2026] Shutting down...");
+        LOGGER.at(Level.INFO).log("[mod jam April 2026] Shutting down...");
         instance = null;
     }
 }
