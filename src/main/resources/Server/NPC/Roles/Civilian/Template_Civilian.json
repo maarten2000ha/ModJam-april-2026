@@ -1,6 +1,6 @@
 {
-  "Type": "Abstract",
   "Debug": "DisplayState",
+  "Type": "Abstract",
   "Parameters": {
     "Appearance": {
       "Value": "Klops_Gentleman",
@@ -8,7 +8,7 @@
     },
     "DropList": {
       "Value": "Empty",
-      "Description": "Drop Items"
+      "Description": "Drop items"
     },
     "MaxHealth": {
       "Value": 100,
@@ -17,19 +17,46 @@
     "NameTranslationKey": {
       "Value": "server.npcRoles.Template.name",
       "Description": "Translation key for NPC name display"
+    },
+    "WorkPeriod": {
+      "Value": [
+        8.0,
+        18.0
+      ],
+      "Description": "Day period where the NPC should work"
+    },
+    "SleepPeriod": {
+      "Value": [
+        18.0,
+        6.0
+      ],
+      "Description": "Night period where the NPC should sleep"
+    },
+    "WorkBlock": {
+      "Value": "Bench_Weapon",
+      "Description": "The workstation block for the blacksmith"
+    },
+    "BedBlocks": {
+      "Value": "Feran_Bed",
+      "Description": "The bed block for sleeping"
     }
-  },
-  "Appearance": {
-    "Compute": "Appearance"
   },
   "DropList": {
     "Compute": "DropList"
   },
+  "DefaultPlayerAttitude": "FRIENDLY",
+  "DefaultNPCAttitude": "FRIENDLY",
+  "StartState": "Idle",
+  "BusyStates" : ["Sleep"],
+  "Appearance": {
+    "Compute": "Appearance"
+  },
   "MaxHealth": {
     "Compute": "MaxHealth"
   },
-  "DefaultPlayerAttitude": "FRIENDLY",
-  "DefaultNPCAttitude": "FRIENDLY",
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  },
   "MotionControllerList": [
     {
       "Type": "Walk",
@@ -39,8 +66,45 @@
       "Acceleration": 10
     }
   ],
-  "StartState": "Idle",
   "Instructions": [
+    {
+      "Sensor": {
+        "Type": "Time",
+        "Period": {
+          "Compute": "SleepPeriod"
+        },
+        "CheckDay": true
+      },
+      "Instructions": [
+        {
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "MovingToBed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "Time",
+        "Period": {
+          "Compute": "WorkPeriod"
+        },
+        "CheckDay": true
+      },
+      "Instructions": [
+        {
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Work"
+            }
+          ]
+        }
+      ]
+    },
     {
       "Sensor": {
         "Type": "State",
@@ -54,50 +118,24 @@
           },
           "Instructions": [
             {
-              "Actions": [
-                {
-                  "Type": "Random",
-                  "Actions": [
-                    {
-                      "Weight": 80,
-                      "Action": {
-                        "Type": "State",
-                        "State": ".Guard"
-                      }
-                    },
-                    {
-                      "Weight": 20,
-                      "Action": {
-                        "Type" : "State",
-                        "State" : "Sleep"
-                      }
-                    }
-                  ]
-                }
-              ]
+              "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Work"
+      },
+      "Instructions": [
         {
           "Sensor": {
             "Type": "State",
-            "State": ".Guard"
+            "State": ".Default"
           },
           "Instructions": [
-            {
-              "Continue" : true,
-              "ActionsBlocking" : true,
-              "Actions" : [
-                {
-                  "Type" : "Timeout",
-                  "Delay" : [15, 30]
-                },
-                {
-                  "Type" : "State",
-                  "State" : ".Default"
-                }
-              ]
-            },
             {
               "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
             }
@@ -108,14 +146,48 @@
     {
       "Sensor": {
         "Type": "State",
+        "State": "MovingToBed"
+      },
+      "Instructions": [
+        {
+          "Name": "Find and Go to Bed",
+          "Sensor": {
+            "Type": "Block",
+            "Blocks": {
+              "Compute": "BedBlocks"
+            },
+            "Range": 200.0
+          },
+          "BodyMotion": {
+            "Type": "Seek",
+            "StopDistance": 0.5
+          },
+          "Actions": [
+            { "Type": "State", "State": "Sleep" }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
         "State": "Sleep"
       },
       "Instructions": [
-
+        {
+          "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
+          "Modify": {
+            "_ExportStates": [
+              "Idle.Default"
+            ],
+            "Animation": "Sleep",
+            "Duration": [
+              5,
+              6
+            ]
+          }
+        }
       ]
     }
-  ],
-  "NameTranslationKey": {
-    "Compute": "NameTranslationKey"
-  }
+  ]
 }
