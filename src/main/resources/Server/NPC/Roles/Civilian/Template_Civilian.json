@@ -2,61 +2,23 @@
   "Debug": "DisplayState",
   "Type": "Abstract",
   "Parameters": {
-    "Appearance": {
-      "Value": "Klops_Gentleman",
-      "Description": "Model to be used"
-    },
-    "DropList": {
-      "Value": "Empty",
-      "Description": "Drop items"
-    },
-    "MaxHealth": {
-      "Value": 100,
-      "Description": "Max health for the NPC"
-    },
-    "NameTranslationKey": {
-      "Value": "server.npcRoles.Template.name",
-      "Description": "Translation key for NPC name display"
-    },
-    "WorkPeriod": {
-      "Value": [
-        8.0,
-        18.0
-      ],
-      "Description": "Day period where the NPC should work"
-    },
-    "SleepPeriod": {
-      "Value": [
-        18.0,
-        6.0
-      ],
-      "Description": "Night period where the NPC should sleep"
-    },
-    "WorkBlock": {
-      "Value": "Bench_Weapon",
-      "Description": "The workstation block for the blacksmith"
-    },
-    "BedBlocks": {
-      "Value": "Feran_Bed",
-      "Description": "The bed block for sleeping"
-    }
+    "Appearance": { "Value": "Klops_Gentleman", "Description": "Model to be used" },
+    "DropList": { "Value": "Empty", "Description": "Drop items" },
+    "MaxHealth": { "Value": 100, "Description": "Max health for the NPC" },
+    "NameTranslationKey": { "Value": "server.npcRoles.Template.name", "Description": "Translation key for NPC name display" },
+    "WorkPeriod": { "Value": [8.0, 18.0], "Description": "Day period where the NPC should work" },
+    "SleepPeriod": { "Value": [18.0, 6.0], "Description": "Night period where the NPC should sleep" },
+    "AnvilBlocks": { "Value": "Blacksmith_Benches", "Description": "The workstation block for the blacksmith" },
+    "BedBlocks": { "Value": "Feran_Bed", "Description": "The bed block for sleeping" }
   },
-  "DropList": {
-    "Compute": "DropList"
-  },
+  "BusyStates": ["Sleep.Default"],
+  "DropList": { "Compute": "DropList" },
   "DefaultPlayerAttitude": "FRIENDLY",
   "DefaultNPCAttitude": "FRIENDLY",
   "StartState": "Idle",
-  "BusyStates" : ["Sleep"],
-  "Appearance": {
-    "Compute": "Appearance"
-  },
-  "MaxHealth": {
-    "Compute": "MaxHealth"
-  },
-  "NameTranslationKey": {
-    "Compute": "NameTranslationKey"
-  },
+  "Appearance": { "Compute": "Appearance" },
+  "MaxHealth": { "Compute": "MaxHealth" },
+  "NameTranslationKey": { "Compute": "NameTranslationKey" },
   "MotionControllerList": [
     {
       "Type": "Walk",
@@ -68,125 +30,71 @@
   ],
   "Instructions": [
     {
-      "Sensor": {
-        "Type": "Time",
-        "Period": {
-          "Compute": "SleepPeriod"
-        },
-        "CheckDay": true
-      },
-      "Instructions": [
-        {
-          "Actions": [
-            {
-              "Type": "State",
-              "State": "MovingToBed"
-            }
-          ]
-        }
-      ]
+      "Name": "Schedule: Night",
+      "Sensor": { "Type": "Time", "Period": { "Compute": "SleepPeriod" }, "CheckDay": true },
+      "Instructions": [{ "Actions": [{ "Type": "State", "State": "MovingToBed" }] }]
     },
     {
-      "Sensor": {
-        "Type": "Time",
-        "Period": {
-          "Compute": "WorkPeriod"
-        },
-        "CheckDay": true
-      },
-      "Instructions": [
-        {
-          "Actions": [
-            {
-              "Type": "State",
-              "State": "Work"
-            }
-          ]
-        }
-      ]
+      "Name": "Schedule: Day",
+      "Sensor": { "Type": "Time", "Period": { "Compute": "WorkPeriod" }, "CheckDay": true },
+      "Instructions": [{ "Actions": [{ "Type": "State", "State": "Work" }] }]
     },
     {
-      "Sensor": {
-        "Type": "State",
-        "State": "Idle"
-      },
+      "Name": "State Logic: Work",
+      "Sensor": { "Type": "State", "State": "Work" },
       "Instructions": [
         {
-          "Sensor": {
-            "Type": "State",
-            "State": ".Default"
-          },
+          "Name": "Work at Anvil",
+          "Sensor": { "Type": "Block", "Blocks": { "Compute": "AnvilBlocks" }, "Range": 150.0, "Reserve": false },
           "Instructions": [
             {
-              "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Sensor": {
-        "Type": "State",
-        "State": "Work"
-      },
-      "Instructions": [
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".Default"
-          },
-          "Instructions": [
+              "Reference": "Component_Instruction_Intelligent_Chase",
+              "Modify": { "_ExportStates": ["Work.Default"], "StopDistance": 1.2 }
+            },
             {
-              "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
+              "Actions": [
+                {
+                  "Type": "PlayAnimation",
+                  "Animation": "hammering",
+                  "Slot": "Action"
+                }
+              ]
             }
           ]
+        },
+        {
+          "Name": "Fallback: Idle Wander",
+          "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
         }
       ]
     },
     {
-      "Sensor": {
-        "Type": "State",
-        "State": "MovingToBed"
-      },
+      "Name": "State Logic: MovingToBed",
+      "Sensor": { "Type": "State", "State": "MovingToBed" },
       "Instructions": [
         {
           "Name": "Find and Go to Bed",
-          "Sensor": {
-            "Type": "Block",
-            "Blocks": {
-              "Compute": "BedBlocks"
-            },
-            "Range": 200.0
-          },
-          "BodyMotion": {
-            "Type": "Seek",
-            "StopDistance": 0.5
-          },
-          "Actions": [
-            { "Type": "State", "State": "Sleep" }
-          ]
+          "Sensor": { "Type": "Block", "Blocks": { "Compute": "BedBlocks" }, "Range": 200.0 },
+          "BodyMotion": { "Type": "Seek", "StopDistance": 0.5 },
+          "Actions": [{ "Type": "State", "State": "Sleep" }]
         }
       ]
     },
     {
-      "Sensor": {
-        "Type": "State",
-        "State": "Sleep"
-      },
+      "Name": "State Logic: Sleep",
+      "Sensor": { "Type": "State", "State": "Sleep" },
       "Instructions": [
         {
           "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
-          "Modify": {
-            "_ExportStates": [
-              "Idle.Default"
-            ],
-            "Animation": "Sleep",
-            "Duration": [
-              5,
-              6
-            ]
-          }
+          "Modify": { "_ExportStates": ["Idle.Default"], "Animation": "Sleep", "Duration": [1, 2] }
         }
+      ]
+    },
+    {
+      "Name": "State Logic: Idle",
+      "Sensor": { "Type": "State", "State": "Idle" },
+      "Instructions": [
+        { "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path" }
       ]
     }
   ]
