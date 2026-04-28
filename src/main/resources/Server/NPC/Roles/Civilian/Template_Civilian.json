@@ -32,61 +32,71 @@
     {
       "Name": "Schedule: Night",
       "Sensor": { "Type": "Time", "Period": { "Compute": "SleepPeriod" }, "CheckDay": true },
-      "Instructions": [{ "Actions": [{ "Type": "State", "State": "MovingToBed" }] }]
+      "Instructions": [{ "Actions": [{ "Type": "State", "State": "Sleep.Move_To_Bed" }] }]
     },
     {
       "Name": "Schedule: Day",
       "Sensor": { "Type": "Time", "Period": { "Compute": "WorkPeriod" }, "CheckDay": true },
-      "Instructions": [{ "Actions": [{ "Type": "State", "State": "Work" }] }]
-    },
-    {
-      "Name": "State Logic: Work",
-      "Sensor": { "Type": "State", "State": "Work" },
-      "Instructions": [
-        {
-          "Name": "Work at Anvil",
-          "Sensor": { "Type": "Block", "Blocks": { "Compute": "AnvilBlocks" }, "Range": 150.0, "Reserve": false },
-          "Instructions": [
-            {
-              "Reference": "Component_Instruction_Intelligent_Chase",
-              "Modify": { "_ExportStates": ["Work.Default"], "StopDistance": 1.2 }
-            },
-            {
-              "Actions": [
-                {
-                  "Type": "PlayAnimation",
-                  "Animation": "hammering",
-                  "Slot": "Action"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Name": "Fallback: Idle Wander",
-          "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
-        }
-      ]
-    },
-    {
-      "Name": "State Logic: MovingToBed",
-      "Sensor": { "Type": "State", "State": "MovingToBed" },
-      "Instructions": [
-        {
-          "Name": "Find and Go to Bed",
-          "Sensor": { "Type": "Block", "Blocks": { "Compute": "BedBlocks" }, "Range": 200.0 },
-          "BodyMotion": { "Type": "Seek", "StopDistance": 0.5 },
-          "Actions": [{ "Type": "State", "State": "Sleep" }]
-        }
-      ]
+      "Instructions": [{ "Actions": [{ "Type": "State", "State": "Work.Move_To_Work" }] }]
     },
     {
       "Name": "State Logic: Sleep",
       "Sensor": { "Type": "State", "State": "Sleep" },
       "Instructions": [
         {
+          "Sensor": {"Type" : "State", "State" : ".Default"},
           "Reference": "Component_Instruction_Play_Animation_In_State_For_Duration",
           "Modify": { "_ExportStates": ["Idle.Default"], "Animation": "Sleep", "Duration": [1, 2] }
+        },
+        {
+          "Sensor" : { "Type" :  "State", "State" :  ".Move_To_Bed"},
+          "Instructions": [
+            {
+              "Name": "Find and Go to Bed",
+              "Sensor": { "Type": "Block", "Blocks": { "Compute": "BedBlocks" }, "Range": 200.0 },
+              "BodyMotion": { "Type": "Seek", "StopDistance": 0.5 },
+              "Actions": [{ "Type": "State", "State": "Sleep" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "State Logic: Work",
+      "Sensor": { "Type": "State", "State": "Work" },
+      "Instructions": [
+        {
+          "Sensor": { "Type":  "State", "State":  ".Default"},
+          "Instructions" : [
+            {
+              "Name": "Fallback: Idle Wander",
+              "Reference": "Component_Instruction_Intelligent_Idle_Motion_Follow_Path"
+            }
+          ]
+        },
+        {
+          "Sensor" : { "Type" :  "State", "State":  ".Move_To_Work"},
+          "Instructions" : [
+            {
+              "Name": "Work at Anvil",
+              "Sensor": { "Type": "Block", "Blocks": { "Compute": "AnvilBlocks" }, "Range": 150.0, "Reserve": false },
+              "Instructions": [
+                {
+                  "Reference": "Component_Instruction_Intelligent_Chase",
+                  "Modify": { "_ExportStates": ["Idle.Default"], "StopDistance": 1.2 }
+                },
+                {
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Animation": "hammering",
+                      "Slot": "Action"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },
