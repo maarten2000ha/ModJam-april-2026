@@ -20,7 +20,6 @@ public class modjamapril2026PluginCommand extends AbstractCommandCollection {
         this.addSubCommand(new HelpSubCommand());
         this.addSubCommand(new InfoSubCommand());
         this.addSubCommand(new ReloadSubCommand());
-        this.addSubCommand(new UISubCommand());
     }
 
     @Override

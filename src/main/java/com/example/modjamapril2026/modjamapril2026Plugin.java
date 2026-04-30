@@ -1,5 +1,7 @@
 package com.example.modjamapril2026;
 
+import com.example.modjamapril2026.components.JobComponent;
+import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.event.EventRegistry;
@@ -7,6 +9,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 
 import com.example.modjamapril2026.commands.modjamapril2026PluginCommand;
 import com.example.modjamapril2026.listeners.PlayerListener;
+import com.hypixel.hytale.server.npc.NPCPlugin;
 
 import javax.annotation.Nonnull;
 import java.util.logging.Level;
@@ -69,6 +72,19 @@ public class modjamapril2026Plugin extends JavaPlugin {
         } catch (Exception e) {
             LOGGER.at(Level.WARNING).withCause(e).log("[mod jam April 2026] Failed to register listeners");
         }
+    }
+
+    private void registerComponent() {
+
+        var registry = getEntityStoreRegistry();
+
+        var jobComponentType = registry.registerComponent(
+                JobComponent.class,
+                "Job_data",
+                JobComponent.CODEC
+        );
+        JobComponent.setComponentType(jobComponentType);
+
     }
 
     @Override

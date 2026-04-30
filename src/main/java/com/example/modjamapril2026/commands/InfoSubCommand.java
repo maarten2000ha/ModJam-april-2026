@@ -15,7 +15,6 @@ public class InfoSubCommand extends CommandBase {
 
     public InfoSubCommand() {
         super("info", "Show plugin information");
-        this.setPermissionGroup(null);
     }
 
     @Override

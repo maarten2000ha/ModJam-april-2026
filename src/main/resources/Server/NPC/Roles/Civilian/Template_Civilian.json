@@ -82,10 +82,6 @@
               "Sensor": { "Type": "Block", "Blocks": { "Compute": "AnvilBlocks" }, "Range": 150.0, "Reserve": false },
               "Instructions": [
                 {
-                  "Reference": "Component_Instruction_Intelligent_Chase",
-                  "Modify": { "_ExportStates": ["Idle.Default"], "StopDistance": 1.2 }
-                },
-                {
                   "Actions": [
                     {
                       "Type": "PlayAnimation",
