@@ -1,6 +1,7 @@
 package com.example.modjamapril2026;
 
 import com.example.modjamapril2026.components.JobComponent;
+import com.example.modjamapril2026.components.VillagerComponent;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -45,6 +46,8 @@ public class modjamapril2026Plugin extends JavaPlugin {
         // Register event listeners
         registerListeners();
 
+        registerComponent();
+
         LOGGER.at(Level.INFO).log("[mod jam April 2026] Setup complete!");
     }
 
@@ -54,7 +57,7 @@ public class modjamapril2026Plugin extends JavaPlugin {
     private void registerCommands() {
         try {
             getCommandRegistry().registerCommand(new modjamapril2026PluginCommand());
-            LOGGER.at(Level.INFO).log("[mod jam april 2026] Registered /mja2 command");
+            LOGGER.at(Level.INFO).log("[mod jam april 2026] Registered /mja command");
         } catch (Exception e) {
             LOGGER.at(Level.WARNING).withCause(e).log("[mod jam april 2026] Failed to register commands");
         }
@@ -84,6 +87,13 @@ public class modjamapril2026Plugin extends JavaPlugin {
                 JobComponent.CODEC
         );
         JobComponent.setComponentType(jobComponentType);
+
+        var villagerComponentType = registry.registerComponent(
+                VillagerComponent.class,
+                "Villager_data",
+                VillagerComponent.CODEC
+        );
+        VillagerComponent.setComponentType(villagerComponentType);
 
     }
 

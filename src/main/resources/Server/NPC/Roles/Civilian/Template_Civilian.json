@@ -1,5 +1,4 @@
 {
-  "Debug": "DisplayState",
   "Type": "Abstract",
   "Parameters": {
     "Appearance": { "Value": "Klops_Gentleman", "Description": "Model to be used" },

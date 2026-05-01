@@ -14,12 +14,13 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 public class modjamapril2026PluginCommand extends AbstractCommandCollection {
 
     public modjamapril2026PluginCommand() {
-        super("mja2", "mod jam april 2026 plugin commands");
+        super("mja", "mod jam april 2026 plugin commands");
 
         // Add subcommands
         this.addSubCommand(new HelpSubCommand());
         this.addSubCommand(new InfoSubCommand());
         this.addSubCommand(new ReloadSubCommand());
+        this.addSubCommand(new AddComponentCommand());
     }
 
     @Override

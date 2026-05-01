@@ -7,5 +7,8 @@
   "Main": "com.example.modjamapril2026.modjamapril2026Plugin",
   "LoadOrder": "POSTWORLD",
   "IncludesAssetPack": true,
-  "Hytale:NPC": "*"
+  "Dependencies": {
+    "Hytale:NPC": "*"
+  },
+  "ServerVersion" : "2026.04.30-b4f6a911e"
 }
