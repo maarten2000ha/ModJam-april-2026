@@ -13,10 +13,10 @@ repositories {
         name = "hytale-release"
         url = uri("https://maven.hytale.com/release")
     }
-    maven {
-        name = "hytale-pre-release"
-        url = uri("https://maven.hytale.com/pre-release")
-    }
+//    maven {
+//        name = "hytale-pre-release"
+//        url = uri("https://maven.hytale.com/pre-release")
+//    }
 }
 
 dependencies {
@@ -26,6 +26,7 @@ dependencies {
     // JSR305 annotations (@Nonnull, @Nullable)
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
     implementation("com.google.code.gson:gson:2.10.1")
+//    runtimeOnly("dev.scaffoldit:devtools:0.2.+")
 }
 
 java {

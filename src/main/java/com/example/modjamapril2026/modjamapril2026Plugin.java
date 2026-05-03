@@ -2,6 +2,7 @@ package com.example.modjamapril2026;
 
 import com.example.modjamapril2026.components.JobComponent;
 import com.example.modjamapril2026.components.VillagerComponent;
+import com.example.modjamapril2026.systems.ScheduleSystem;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -47,6 +48,8 @@ public class modjamapril2026Plugin extends JavaPlugin {
         registerListeners();
 
         registerComponent();
+
+        registerSystems();
 
         LOGGER.at(Level.INFO).log("[mod jam April 2026] Setup complete!");
     }
@@ -95,6 +98,12 @@ public class modjamapril2026Plugin extends JavaPlugin {
         );
         VillagerComponent.setComponentType(villagerComponentType);
 
+    }
+
+    private void registerSystems() {
+        var register = getEntityStoreRegistry();
+
+        register.registerSystem(new ScheduleSystem());
     }
 
     @Override

@@ -1,4 +1,5 @@
 {
+  "Debug" : "DisplayState",
   "Type" : "Variant",
   "Reference" : "Template_Civilian",
   "Modify" : {
